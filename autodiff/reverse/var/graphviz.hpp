@@ -15,10 +15,13 @@ struct GraphvizVisitor {
   // The pointer to the expression is a unique vertex descriptor
   using Pointer = Expr<T>*;
 
-  void register_node(Pointer t, const std::string& name) {
+  bool register_node(Pointer t, const std::string& name) {
     if(vertices.count(t) == 0) {
       vertices.emplace(t, name);
+      return true;
     }
+
+    return false;
   }
 
   template<typename U>
@@ -29,15 +32,17 @@ struct GraphvizVisitor {
 
   void visit(Pointer t) {
     if(auto independent = dynamic_cast<IndependentVariableExpr<T>*>(t)) {
-      register_node(t, "Independent");
-      descend(t, independent->gradx.get(), "gradx");
+      if(register_node(t, "Independent")) {
+        descend(t, independent->gradx.get(), "gradx");
+      }
       return;
     }
 
     if(auto dependent = dynamic_cast<DependentVariableExpr<T>*>(t)) {
-      register_node(t, "Dependent");
-      descend(t, dependent->expr.get(), "expr");
-      descend(t, dependent->gradx.get(), "gradx");
+      if(register_node(t, "Dependent")) {
+        descend(t, dependent->expr.get(), "expr");
+        descend(t, dependent->gradx.get(), "gradx");
+      }
       return;
     }
 
@@ -47,163 +52,188 @@ struct GraphvizVisitor {
     }
 
     if(auto unary = dynamic_cast<NegativeExpr<T>*>(t)) {
-      register_node(t, "Negate");
-      descend(t, unary->x.get(), "x");
+      if(register_node(t, "Negate")) {
+        descend(t, unary->x.get(), "x");
+      }
       return;
     }
 
     if(auto add = dynamic_cast<AddExpr<T>*>(t)) {
-      register_node(t, "Add");
-      descend(t, add->l.get(), "x");
-      descend(t, add->r.get(), "y");
+      if(register_node(t, "Add")) {
+        descend(t, add->l.get(), "x");
+        descend(t, add->r.get(), "y");
+      }
       return;
     }
 
     if(auto sub = dynamic_cast<SubExpr<T>*>(t)) {
-      register_node(t, "Sub");
-      descend(t, sub->l.get(), "x");
-      descend(t, sub->r.get(), "y");
+      if(register_node(t, "Sub")) {
+        descend(t, sub->l.get(), "x");
+        descend(t, sub->r.get(), "y");
+      }
       return;
     }
 
     if(auto mul = dynamic_cast<MulExpr<T>*>(t)) {
-      register_node(t, "Mul");
-      descend(t, mul->l.get(), "x");
-      descend(t, mul->r.get(), "y");
+      if(register_node(t, "Mul")) {
+        descend(t, mul->l.get(), "x");
+        descend(t, mul->r.get(), "y");
+      }
       return;
     }
 
     if(auto div = dynamic_cast<DivExpr<T>*>(t)) {
-      register_node(t, "Div");
-      descend(t, div->l.get(), "x");
-      descend(t, div->r.get(), "y");
+      if(register_node(t, "Div")) {
+        descend(t, div->l.get(), "x");
+        descend(t, div->r.get(), "y");
+      }
       return;
     }
 
     if(auto sin = dynamic_cast<SinExpr<T>*>(t)) {
-      register_node(t, "Sin");
-      descend(t, sin->x.get(), "x");
+      if(register_node(t, "Sin")) {
+        descend(t, sin->x.get(), "x");
+      }
       return;
     }
 
     if(auto cos = dynamic_cast<CosExpr<T>*>(t)) {
-      register_node(t, "Cos");
-      descend(t, cos->x.get(), "x");
+      if(register_node(t, "Cos")) {
+        descend(t, cos->x.get(), "x");
+      }
       return;
     }
 
     if(auto tan = dynamic_cast<TanExpr<T>*>(t)) {
-      register_node(t, "Tan");
-      descend(t, tan->x.get(), "x");
+      if(register_node(t, "Tan")) {
+        descend(t, tan->x.get(), "x");
+      }
       return;
     }
 
     if(auto sinh = dynamic_cast<SinhExpr<T>*>(t)) {
-      register_node(t, "Sinh");
-      descend(t, sinh->x.get(), "x");
+      if(register_node(t, "Sinh")) {
+        descend(t, sinh->x.get(), "x");
+      }
       return;
     }
 
     if(auto cosh = dynamic_cast<CoshExpr<T>*>(t)) {
-      register_node(t, "Cosh");
-      descend(t, cosh->x.get(), "x");
+      if(register_node(t, "Cosh")) {
+        descend(t, cosh->x.get(), "x");
+      }
       return;
     }
 
     if(auto tanh = dynamic_cast<TanhExpr<T>*>(t)) {
-      register_node(t, "Tanh");
-      descend(t, tanh->x.get(), "x");
+      if(register_node(t, "Tanh")) {
+        descend(t, tanh->x.get(), "x");
+      }
       return;
     }
 
     if(auto arcsin = dynamic_cast<ArcSinExpr<T>*>(t)) {
-      register_node(t, "Arcsin");
-      descend(t, arcsin->x.get(), "x");
+      if(register_node(t, "Arcsin")) {
+        descend(t, arcsin->x.get(), "x");
+      }
       return;
     }
 
     if(auto arccos = dynamic_cast<ArcCosExpr<T>*>(t)) {
-      register_node(t, "ArcCos");
-      descend(t, arccos->x.get(), "x");
+      if(register_node(t, "ArcCos")) {
+        descend(t, arccos->x.get(), "x");
+      }
       return;
     }
 
     if(auto arctan = dynamic_cast<ArcTanExpr<T>*>(t)) {
-      register_node(t, "ArcTan");
-      descend(t, arctan->x.get(), "x");
+      if(register_node(t, "ArcTan")) {
+        descend(t, arctan->x.get(), "x");
+      }
       return;
     }
 
     if(auto arctan2 = dynamic_cast<ArcTan2Expr<T>*>(t)) {
-      register_node(t, "ArcTan2");
-      descend(t, arctan2->l.get(), "x");
-      descend(t, arctan2->r.get(), "y");
+      if(register_node(t, "ArcTan2")) {
+        descend(t, arctan2->l.get(), "x");
+        descend(t, arctan2->r.get(), "y");
+      }
       return;
     }
 
     if(auto exp = dynamic_cast<ExpExpr<T>*>(t)) {
-      register_node(t, "Exp");
-      descend(t, exp->x.get(), "x");
+      if(register_node(t, "Exp")) {
+        descend(t, exp->x.get(), "x");
+      }
       return;
     }
 
     if(auto log = dynamic_cast<LogExpr<T>*>(t)) {
-      register_node(t, "Log");
-      descend(t, log->x.get(), "x");
+      if(register_node(t, "Log")) {
+        descend(t, log->x.get(), "x");
+      }
       return;
     }
 
     if(auto log10 = dynamic_cast<Log10Expr<T>*>(t)) {
-      register_node(t, "Log10");
-      descend(t, log10->x.get(), "x");
+      if(register_node(t, "Log10")) {
+        descend(t, log10->x.get(), "x");
+      }
       return;
     }
 
     if(auto pow = dynamic_cast<PowExpr<T>*>(t)) {
-      register_node(t, "Pow");
-      descend(t, pow->l.get(), "x");
-      descend(t, pow->r.get(), "y");
+      if(register_node(t, "Pow")) {
+        descend(t, pow->l.get(), "x");
+        descend(t, pow->r.get(), "y");
+      }
       return;
     }
 
     if(auto pow = dynamic_cast<PowConstantLeftExpr<T>*>(t)) {
-      register_node(t, "PowConstX");
-      descend(t, pow->l.get(), "x");
-      descend(t, pow->r.get(), "y");
+      if(register_node(t, "PowConstX")) {
+        descend(t, pow->l.get(), "x");
+        descend(t, pow->r.get(), "y");
+      }
       return;
     }
 
     if(auto pow = dynamic_cast<PowConstantRightExpr<T>*>(t)) {
-      register_node(t, "PowConstY");
-      descend(t, pow->l.get(), "x");
-      descend(t, pow->r.get(), "y");
+      if(register_node(t, "PowConstY")) {
+        descend(t, pow->l.get(), "x");
+        descend(t, pow->r.get(), "y");
+      }
       return;
     }
 
     if(auto sqrt = dynamic_cast<SqrtExpr<T>*>(t)) {
-      register_node(t, "Sqrt");
-      descend(t, sqrt->x.get(), "x");
+      if(register_node(t, "Sqrt")) {
+        descend(t, sqrt->x.get(), "x");
+      }
       return;
     }
 
     if(auto abs = dynamic_cast<AbsExpr<T>*>(t)) {
-      register_node(t, "Abs");
-      descend(t, abs->x.get(), "x");
+      if(register_node(t, "Abs")) {
+        descend(t, abs->x.get(), "x");
+      }
       return;
     }
 
     if(auto hypot2 = dynamic_cast<Hypot2Expr<T>*>(t)) {
-      register_node(t, "Hypot2");
-      descend(t, hypot2->l.get(), "x");
-      descend(t, hypot2->r.get(), "y");
+      if(register_node(t, "Hypot2")) {
+        descend(t, hypot2->l.get(), "x");
+        descend(t, hypot2->r.get(), "y");
+      }
       return;
     }
 
     if(auto hypot3 = dynamic_cast<Hypot3Expr<T>*>(t)) {
-      register_node(t, "Hypot3");
-      descend(t, hypot3->l.get(), "x");
-      descend(t, hypot3->c.get(), "y");
-      descend(t, hypot3->r.get(), "z");
+      if(register_node(t, "Hypot3")) {
+        descend(t, hypot3->l.get(), "x");
+        descend(t, hypot3->c.get(), "y");
+        descend(t, hypot3->r.get(), "z");
+      }
       return;
     }
 
